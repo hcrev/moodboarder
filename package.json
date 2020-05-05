@@ -2,7 +2,7 @@
     "name": "Moodboarder",
     "description": "A simple utility to view your images in a grid.",
     "author": "hcrev",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "scripts": {
         "clean": "rm -rf dist/*",
         "compile:scss": "node-sass-chokidar app/styles/style.scss -o dist",
