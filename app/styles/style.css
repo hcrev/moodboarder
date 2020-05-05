@@ -1,0 +1,39 @@
+.hidden {
+  display: none;
+  border: none !important; }
+
+.panel {
+  position: fixed;
+  border: 2px dashed #ccc;
+  color: #ccc;
+  text-align: center;
+  width: calc(100% - 32px);
+  height: calc(100% - 32px);
+  margin: 16px;
+  z-index: 99; }
+  .panel h3 {
+    margin-top: 5%; }
+  .panel p {
+    margin-top: calc(50vh - 32px - 5%); }
+
+img {
+  width: 100%;
+  display: block; }
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #eee;
+  background-color: #222;
+  margin: 0;
+  padding: 0;
+  height: 100%; }
+
+.prog {
+  position: fixed;
+  top: 20px;
+  left: calc(50% - 100px);
+  border: solid 1px #666;
+  width: 200px;
+  text-align: center;
+  background-color: #111; }
