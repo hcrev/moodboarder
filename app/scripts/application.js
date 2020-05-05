@@ -20,32 +20,41 @@ let controller = {
 
 let view = {
     init: function () {
-        this.dropZone = document.querySelector('#drop-zone');
+        this.dropzone = document.querySelector('#drop-zone');
+        this.header = document.querySelector('#drop-zone h3');
+        this.help = document.querySelector('#drop-zone p');
+        // Timer used to delay the ondragleave from firing every 100ms or so. Fixes flickering in Safari and Chrome.
+        view.dragTimer;
+        console.log(this.dropzone, this.help, this.header);
 
-        this.dropZone.ondrop = function (e) {
+        this.dropzone.ondrop = function (e) {
             e.preventDefault();
 
             // Hide the dropzone to interact with the div below...
-
-            document.querySelector('#drop-zone p').className = 'hidden';
-            document.querySelector('#drop-zone h3').className = 'hidden';
-            document.querySelector('#drop-zone').className = 'panel hidden';
+            view.dropzone.className = 'panel hidden';
+            view.header.className = 'hidden';
+            view.help.className = 'hidden';
 
             // ...but unhide when dragging new images in
             document.ondragover = function () {
-                document.querySelector('#drop-zone').className = 'panel';
-                document.querySelector('#drop-zone p').className = 'hidden';
-                document.querySelector('#drop-zone h3').className = 'hidden';
+                window.clearTimeout(view.dragTimer);
+                view.dropzone.className = 'panel';
+                view.header.className = 'hidden';
+                view.help.className = 'hidden';
             }
             document.ondragleave = function () {
-                document.querySelector('#drop-zone').className = 'panel hidden';
+                window.clearTimeout(view.dragTimer);
+                view.dragTimer = window.setTimeout(function () {
+                    view.dropzone.className = 'panel hidden';
+                }, 85);
+
             }
             controller.startUpload(e.dataTransfer.files)
         };
-        this.dropZone.ondragover = function () {
+        this.dropzone.ondragover = function () {
             return false;
         };
-        this.dropZone.ondragleave = function () {
+        this.dropzone.ondragleave = function () {
             return false;
         };
 
@@ -137,7 +146,6 @@ let view = {
                     break;
                 case 68:
                     // The d key removes the element that the mouse is currently on
-                    console.log(view.currentImage);
                     view.currentImage.remove();
                     break;
                 case 72:
