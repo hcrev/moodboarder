@@ -82,7 +82,6 @@ let view = {
             };
         } else {
             alert(name + "\n\nUnsupported filetype: " + type + "\nOnly images allowed.");
-            //return window.location.href = window.location.href;
         }
 
         this.newImgNameContainer.append(this.newImgName);
@@ -148,7 +147,6 @@ let view = {
                     view.currentFileName = view.currentImage.children[0];
                     // show filename
                     view.currentFileName.className = (view.currentFileName.className === 'filename hidden') ? 'filename' : 'filename hidden';
-                    console.log(view.currentFileName.className);
                     break;
                 case 72:
                     // The h key toggle the help menu
