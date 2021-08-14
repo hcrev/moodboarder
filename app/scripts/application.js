@@ -29,7 +29,7 @@ let view = {
 
         this.dropzone.ondrop = function (e) {
             e.preventDefault();
-
+            let dt = e.dataTransfer;
             // Hide the dropzone to interact with the div below...
             view.dropzone.className = 'panel hidden';
             view.header.className = 'hidden';
@@ -49,7 +49,9 @@ let view = {
                 }, 85);
 
             }
-            controller.startUpload(e.dataTransfer.files)
+            if (dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))){
+              controller.startUpload(dt.files);
+            }
         };
         this.dropzone.ondragover = function () {
             return false;
