@@ -1,7 +1,7 @@
 let controller = {
     init: function () {
         view.init();
-        view.initMacy();
+        view.initPackery();
         window.URL = window.URL || window.webkitURL;
     },
     startUpload: function (files) {
@@ -65,6 +65,7 @@ let view = {
     appendImg: function (file, type, name) {
         if (type.match('image.*')) {
             this.newContainer = document.createElement('div');
+            this.newContainer.className = 'grid-item';
             this.newImgNameContainer = document.createElement('div');
             this.newImgNameContainer.className = 'filename hidden';
             this.newImgName = document.createElement('span');
@@ -86,11 +87,13 @@ let view = {
 
         this.newImgNameContainer.append(this.newImgName);
         this.newContainer.append(this.newImgNameContainer, this.newImg);
-        document.querySelector('#macy-container').append(this.newContainer);
+        document.querySelector('#packery-container').append(this.newContainer);
+        this.packery.appended(this.newContainer);
+        console.log('adding new file');
         controller.currentFile++;
         if (controller.currentFile == controller.fileLength) {
             view.prog.outerHTML = '';
-            view.macy.recalculate(true);
+            view.packery.layout();
         } else {
             view.prog.firstChild.innerHTML = 'Loading... ' + controller.currentFile + ' / ' + controller.fileLength;
         }
@@ -98,12 +101,13 @@ let view = {
 
     },
 
-    initMacy: function () {
-        this.macy = Macy({
-            container: '#macy-container',
-            columns: 4,
-            margin: -1
-        })
+    initPackery: function () {
+        this.grid = document.querySelector('#packery-container');
+        this.packery = new Packery( this.grid, {
+            itemSelector: '.grid-item',
+            percentPosition: true
+        });
+
         this.addKeyListeners();
     },
 
@@ -120,26 +124,27 @@ let view = {
             switch (e.keyCode) {
                 // 49-54 = 1-6: for column layout
                 case 49:
-                    view.macy.options.columns = 1;
+                    view.col_width = 1;
                     break;
                 case 50:
-                    view.macy.options.columns = 2;
+                    view.col_width = 2;
                     break;
                 case 51:
-                    view.macy.options.columns = 3;
+                    view.col_width = 3;
                     break;
                 case 52:
-                    view.macy.options.columns = 4;
+                    view.col_width = 4;
                     break;
                 case 53:
-                    view.macy.options.columns = 5;
+                    view.col_width = 5;
                     break;
                 case 54:
-                    view.macy.options.columns = 6;
+                    view.col_width = 6;
                     break;
                 case 68:
                     // The d key removes the element that the mouse is currently on
-                    view.currentImage.remove();
+                    view.packery.remove(view.currentImage);
+                    view.packery.layout();
                     break;
                 case 73:
                     // The i key shows name of the element that the mouse is currently on
@@ -158,11 +163,13 @@ let view = {
                     } else {
                         document.querySelector('#drop-zone p').className = '';
                         document.querySelector('#drop-zone h3').className = '';
-                        document.getElementById('macy-container').children.length > 0 ? dropzone.className = 'panel help' : dropzone.className = 'panel';
+                        document.getElementById('packery-container').children.length > 0 ? dropzone.className = 'panel help' : dropzone.className = 'panel';
                     }
                     break;
             }
-            view.macy.recalculate(true);
+            // update global variable in css
+            document.documentElement.style.cssText = `--grid-cols: ${view.col_width}`;
+            view.packery.layout();
         };
     }
 }
