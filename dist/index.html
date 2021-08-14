@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>MoodBoarder</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+    <!-- Drop Zone -->
+    <div class="panel" id="drop-zone">
+        <h3>Moodboarder — A simple utility to view your images in a grid.</h3>
+        <p>
+            <strong>Drop images anywhere.</strong>
+            <small>
+                <br><br>Refresh (CMD/CTRL + R) to restart.
+                <br>Press keys <b>1-9</b> to change column layout.
+                <br>Drag and drop to reorder.
+                <br><br>Hover over image, then press:
+                <br><b>I</b> key to display info.
+                <br><b>D</b> key to remove it.
+                <br><br><b>H</b> key show/hides help.
+            </small>
+        </p>
+    </div>
+
+    <div id="packery-container"></div>
+
+    <script type="text/javascript" src="vendor.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>
