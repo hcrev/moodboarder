@@ -102,7 +102,7 @@ let view = {
         if (controller.currentFile == controller.fileLength) {
             view.prog.outerHTML = '';
             view.packery.layout();
-            alert(view.unsupportedFiles.join('\n'));
+            if(this.unsupportedFiles.length > 1) alert(view.unsupportedFiles.join('\n'));
         } else {
             view.prog.firstChild.innerHTML = 'Loading... ' + controller.currentFile + ' / ' + controller.fileLength;
         }
