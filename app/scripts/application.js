@@ -7,6 +7,7 @@ let controller = {
     startUpload: function (files) {
         this.fileLength = files.length;
         this.currentFile = 0;
+        view.unsupportedFiles = ['\nOnly image files allowed!\n\nThese files were not imported:'];
         view.initProgress(files.length);
         let interval = setInterval(function () {
             let i = controller.currentFile;
@@ -81,19 +82,20 @@ let view = {
             this.newImg.onload = function () {
                 window.URL.revokeObjectURL(this.src);
             };
+            this.newImgNameContainer.append(this.newImgName);
+            this.newContainer.append(this.newImgNameContainer, this.newImg);
+            document.querySelector('#packery-container').append(this.newContainer);
+            this.packery.appended(this.newContainer);
+            console.log('adding new image');
         } else {
-            alert(name + "\n\nUnsupported filetype: " + type + "\nOnly images allowed.");
+            this.unsupportedFiles.push(`  -  ${name}`);
         }
 
-        this.newImgNameContainer.append(this.newImgName);
-        this.newContainer.append(this.newImgNameContainer, this.newImg);
-        document.querySelector('#packery-container').append(this.newContainer);
-        this.packery.appended(this.newContainer);
-        console.log('adding new file');
         controller.currentFile++;
         if (controller.currentFile == controller.fileLength) {
             view.prog.outerHTML = '';
             view.packery.layout();
+            alert(view.unsupportedFiles.join('\n'));
         } else {
             view.prog.firstChild.innerHTML = 'Loading... ' + controller.currentFile + ' / ' + controller.fileLength;
         }
