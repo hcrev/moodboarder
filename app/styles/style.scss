@@ -1,6 +1,6 @@
 html {
-  box-sizing: border-box;
-  --grid-cols: 2;
+  //box-sizing: border-box;
+  --grid-cols: 4;
 }
 
 .hidden {
@@ -34,9 +34,9 @@ html {
 
 #packery-container{
   /* clear fix */
-  // content: '';
-  // display: block;
-  // clear: both;
+  content: '';
+  display: block;
+  clear: both;
 
   .filename {
       display: flex;
@@ -58,14 +58,20 @@ html {
   .grid-item {
     float: left;
     width: calc(100% / var(--grid-cols));
+    cursor: pointer;
+
+    &.is-dragging,
+    &.is-positioning-post-drag,
+    &.is-pointer-down{
+      z-index:2;
+      cursor:move;
+    }
 
     img {
       width: 100%;
       height:auto;
       display: block;
     }
-    //background: #C09;
-    //border: 2px solid hsla(0, 0%, 0%, 0.5);
   }
 
 }

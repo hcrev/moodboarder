@@ -15,6 +15,12 @@ let controller = {
             i++;
             if (i >= files.length) clearInterval(interval);
         }, 10);
+    },
+    makeDraggable: function (itemElem) {
+      // make element draggable with Draggabilly
+      const draggie = new Draggabilly( itemElem );
+      // bind Draggabilly events to Packery
+      view.packery.bindDraggabillyEvents(draggie);
     }
 
 }
@@ -86,6 +92,7 @@ let view = {
             this.newContainer.append(this.newImgNameContainer, this.newImg);
             document.querySelector('#packery-container').append(this.newContainer);
             this.packery.appended(this.newContainer);
+            controller.makeDraggable(this.newContainer);
             console.log('adding new image');
         } else {
             this.unsupportedFiles.push(`  -  ${name}`);
@@ -107,7 +114,8 @@ let view = {
         this.grid = document.querySelector('#packery-container');
         this.packery = new Packery( this.grid, {
             itemSelector: '.grid-item',
-            percentPosition: true
+            percentPosition: true,
+            columnWidth: '.grid-item'
         });
 
         this.addKeyListeners();
@@ -123,30 +131,50 @@ let view = {
 
     addKeyListeners: function () {
         document.onkeydown = function (e) {
+          let is_reLayout = false;
             switch (e.keyCode) {
                 // 49-54 = 1-6: for column layout
                 case 49:
                     view.col_width = 1;
+                    is_reLayout = true;
                     break;
                 case 50:
                     view.col_width = 2;
+                    is_reLayout = true;
                     break;
                 case 51:
                     view.col_width = 3;
+                    is_reLayout = true;
                     break;
                 case 52:
                     view.col_width = 4;
+                    is_reLayout = true;
                     break;
                 case 53:
                     view.col_width = 5;
+                    is_reLayout = true;
                     break;
                 case 54:
-                    view.col_width = 6;
+                // fixes drag/drop on last column
+                    view.col_width = 6.00001;
+                    is_reLayout = true;
+                    break;
+                case 55:
+                    view.col_width = 7;
+                    is_reLayout = true;
+                    break;
+                case 56:
+                    view.col_width = 8;
+                    is_reLayout = true;
+                    break;
+                case 57:
+                    view.col_width = 9;
+                    is_reLayout = true;
                     break;
                 case 68:
                     // The d key removes the element that the mouse is currently on
                     view.packery.remove(view.currentImage);
-                    view.packery.layout();
+                    is_reLayout = true;
                     break;
                 case 73:
                     // The i key shows name of the element that the mouse is currently on
@@ -170,8 +198,10 @@ let view = {
                     break;
             }
             // update global variable in css
-            document.documentElement.style.cssText = `--grid-cols: ${view.col_width}`;
-            view.packery.layout();
+            if(is_reLayout){
+              document.documentElement.style.cssText = `--grid-cols: ${view.col_width}`;
+              view.packery.layout();
+            }
         };
     }
 }
