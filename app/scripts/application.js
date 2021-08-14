@@ -73,16 +73,8 @@ let view = {
                 return function () {
                     // get container that mouse is on and store it globally
                     view.currentImage = this;
-                    // get first item (filename div) of container
-                    view.currentFileName = this.children[0];
-                    // show filename
-                    view.currentFileName.className = 'filename';
                 }
             })(name)
-            // hide filename
-            this.newContainer.onmouseout = function () {
-                view.currentFileName.className = 'filename hidden';
-            }
             this.newImg.onload = function () {
                 window.URL.revokeObjectURL(this.src);
             };
@@ -147,6 +139,14 @@ let view = {
                 case 68:
                     // The d key removes the element that the mouse is currently on
                     view.currentImage.remove();
+                    break;
+                case 73:
+                    // The i key shows name of the element that the mouse is currently on
+                    // get first item (filename div) of container
+                    view.currentFileName = view.currentImage.children[0];
+                    // show filename
+                    view.currentFileName.className = (view.currentFileName.className === 'filename hidden') ? 'filename' : 'filename hidden';
+                    console.log(view.currentFileName.className);
                     break;
                 case 72:
                     // The h key toggle the help menu
