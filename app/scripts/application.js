@@ -199,7 +199,7 @@ let view = {
             }
             // update global variable in css
             if(is_reLayout){
-              document.documentElement.style.cssText = `--grid-cols: ${view.col_width}`;
+              document.documentElement.style.cssText = `--grid-cols: ${view.col_width || 4}`;
               view.packery.layout();
             }
         };
