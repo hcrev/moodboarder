@@ -2,6 +2,7 @@ let controller = {
     init: function () {
         view.init();
         view.initPackery();
+        view.is_fullscreen = false;
         window.URL = window.URL || window.webkitURL;
     },
     startUpload: function (files) {
@@ -30,6 +31,8 @@ let view = {
         this.dropzone = document.querySelector('#drop-zone');
         this.header = document.querySelector('#drop-zone h3');
         this.help = document.querySelector('#drop-zone p');
+        this.fullscreen = document.querySelector('#fullscreen');
+        this.fs_filename = document.querySelector('#fs-filename');
         // Timer used to delay the ondragleave from firing every 100ms or so. Fixes flickering in Safari and Chrome.
         view.dragTimer;
         console.log(this.dropzone, this.help, this.header);
@@ -57,6 +60,7 @@ let view = {
 
             }
             if (dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))){
+              if(view.is_fullscreen)view.toggle_fullscreen();
               controller.startUpload(dt.files);
             }
         };
@@ -129,6 +133,20 @@ let view = {
         this.prog = document.querySelector('.prog');
     },
 
+    toggle_fullscreen: function () {
+      if (!view.is_fullscreen){
+        // this.grid.className = 'hidden';
+        this.fullscreen.className = '';
+        this.fullscreen.style.backgroundImage = `url(${view.currentImage.children[1].src})`;
+        view.is_fullscreen = true;
+        console.log(view.currentImage.children[1].src);
+      }else{
+        this.fullscreen.className = 'hidden';
+        // this.grid.className = '';
+        view.is_fullscreen = false;
+      }
+    },
+
     addKeyListeners: function () {
         document.onkeydown = function (e) {
           let is_reLayout = false;
@@ -176,14 +194,26 @@ let view = {
                 case 68:
                     // The d key removes the element that the mouse is currently on
                     view.packery.remove(view.currentImage);
+                    if(view.is_fullscreen)view.toggle_fullscreen();
                     is_reLayout = true;
+                    break;
+                case 70:
+                    view.toggle_fullscreen();
+                    view.fs_filename.className = 'hidden';
+                    // view.currentImage.children[0].className = 'filename hidden';
                     break;
                 case 73:
                     // The i key shows name of the element that the mouse is currently on
                     // get first item (filename div) of container
                     view.currentFileName = view.currentImage.children[0];
+
                     // show filename
-                    view.currentFileName.className = (view.currentFileName.className === 'filename hidden') ? 'filename' : 'filename hidden';
+                    if(view.is_fullscreen){
+                      view.fs_filename.firstChild.innerHTML = view.currentFileName.firstChild.innerHTML;
+                      view.fs_filename.className = (view.fs_filename.className === 'hidden') ? '' : 'hidden';
+                    }else{
+                      view.currentFileName.className = (view.currentFileName.className === 'filename hidden') ? 'filename' : 'filename hidden';
+                    }
                     break;
                 case 72:
                     // The h key toggle the help menu
@@ -200,7 +230,7 @@ let view = {
                     break;
             }
             // update global variable in css
-            if(is_reLayout){
+            if(is_reLayout && !view.is_fullscreen){
               document.documentElement.style.cssText = `--grid-cols: ${view.col_width || 4}`;
               view.packery.layout();
             }

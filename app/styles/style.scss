@@ -32,6 +32,37 @@ html {
     }
 }
 
+#fullscreen{
+  background-color: #222;
+  background-image: url("");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 88;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  #fs-filename {
+      display: flex;
+      position: absolute;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: rgba(10, 10, 10, .9);
+      height: 100%;
+      width: 100%;
+
+      span {
+          margin: 10%;
+          overflow-wrap: anywhere;
+          hyphens: auto;
+      }
+  }
+}
+
 #packery-container{
   /* clear fix */
   content: '';
@@ -43,6 +74,7 @@ html {
       position: absolute;
       justify-content: center;
       align-items: center;
+      text-align: center;
       background: rgba(10, 10, 10, .9);
       height: 100%;
       width: 100%;
