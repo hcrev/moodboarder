@@ -143,7 +143,8 @@ let view = {
                     is_reLayout = true;
                     break;
                 case 51:
-                    view.col_width = 3;
+                // fixes drag/drop on last column
+                    view.col_width = 3.00001;
                     is_reLayout = true;
                     break;
                 case 52:
@@ -168,7 +169,8 @@ let view = {
                     is_reLayout = true;
                     break;
                 case 57:
-                    view.col_width = 9;
+                // fixes drag/drop on last column
+                    view.col_width = 9.00001;
                     is_reLayout = true;
                     break;
                 case 68:
