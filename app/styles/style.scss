@@ -22,13 +22,21 @@ html {
     margin: 16px;
     z-index: 99;
     background: none;
+    display: grid;
+    grid-template-rows: 20% auto 10%;
+    align-items: center;
 
-    h3 {
+    h1, p, footer {
         margin: 5%;
     }
 
-    p {
-        margin-top: calc(50vh - 32px - 8%);
+    footer{
+      a {
+        &:link, &:visited{
+          color:white;
+
+        }
+      }
     }
 }
 

@@ -29,8 +29,9 @@ let controller = {
 let view = {
     init: function () {
         this.dropzone = document.querySelector('#drop-zone');
-        this.header = document.querySelector('#drop-zone h3');
+        this.header = document.querySelector('#drop-zone h1');
         this.help = document.querySelector('#drop-zone p');
+        this.footer = document.querySelector('#drop-zone footer');
         this.fullscreen = document.querySelector('#fullscreen');
         this.fs_filename = document.querySelector('#fs-filename');
         // Timer used to delay the ondragleave from firing every 100ms or so. Fixes flickering in Safari and Chrome.
@@ -44,6 +45,7 @@ let view = {
             view.dropzone.className = 'panel hidden';
             view.header.className = 'hidden';
             view.help.className = 'hidden';
+            view.footer.className = 'hidden';
 
             // ...but unhide when dragging new images in
             document.ondragover = function () {
@@ -51,6 +53,7 @@ let view = {
                 view.dropzone.className = 'panel';
                 view.header.className = 'hidden';
                 view.help.className = 'hidden';
+                view.footer.className = 'hidden';
             }
             document.ondragleave = function () {
                 window.clearTimeout(view.dragTimer);
@@ -134,7 +137,7 @@ let view = {
     },
 
     toggle_fullscreen: function () {
-      if (!view.is_fullscreen){
+      if (!view.is_fullscreen && view.currentImage){
         // this.grid.className = 'hidden';
         this.fullscreen.className = '';
         this.fullscreen.style.backgroundImage = `url(${view.currentImage.children[1].src})`;
@@ -193,7 +196,7 @@ let view = {
                     break;
                 case 67:
                     // The C key copies the filename to clipboard
-                    navigator.clipboard.writeText(view.currentImage.children[0].firstChild.innerHTML).then(function() {
+                    if(view.currentImage)                 navigator.clipboard.writeText(view.currentImage.children[0].firstChild.innerHTML).then(function() {
                       console.log('Copied ' + view.currentImage.children[0].firstChild.innerHTML);
                     });
 
@@ -202,7 +205,16 @@ let view = {
                     // The d key removes the element that the mouse is currently on
                     view.packery.remove(view.currentImage);
                     if(view.is_fullscreen)view.toggle_fullscreen();
-                    is_reLayout = true;
+                    view.currentImage = '';
+                    if(view.packery.getItemElements().length > 0) {
+                      is_reLayout = true;
+                    }else{
+                      view.dropzone.className = 'panel';
+                      view.header.className = '';
+                      view.help.className = '';
+                      view.footer.className = '';
+                    }
+
                     break;
                 case 70:
                     view.toggle_fullscreen();
@@ -212,27 +224,32 @@ let view = {
                 case 73:
                     // The i key shows name of the element that the mouse is currently on
                     // get first item (filename div) of container
-                    view.currentFileName = view.currentImage.children[0];
+                    if(view.currentImage){
+                      view.currentFileName = view.currentImage.children[0];
 
-                    // show filename
-                    if(view.is_fullscreen){
-                      view.fs_filename.firstChild.innerHTML = view.currentFileName.firstChild.innerHTML;
-                      view.fs_filename.className = (view.fs_filename.className === 'hidden') ? '' : 'hidden';
-                    }else{
-                      view.currentFileName.className = (view.currentFileName.className === 'filename hidden') ? 'filename' : 'filename hidden';
+                      // show filename
+                      if(view.is_fullscreen){
+                        view.fs_filename.firstChild.innerHTML = view.currentFileName.firstChild.innerHTML;
+                        view.fs_filename.className = (view.fs_filename.className === 'hidden') ? '' : 'hidden';
+                      }else{
+                        view.currentFileName.className = (view.currentFileName.className === 'filename hidden') ? 'filename' : 'filename hidden';
+                      }
                     }
+
                     break;
                 case 72:
                     // The h key toggle the help menu
                     let dropzone = document.querySelector('#drop-zone');
-                    if (!dropzone.classList.contains('hidden')) {
-                        document.querySelector('#drop-zone p').className = 'hidden';
-                        document.querySelector('#drop-zone h3').className = 'hidden';
-                        dropzone.className = 'panel hidden';
+                    if (!view.help.classList.contains('hidden')) {
+                        view.header.className = 'hidden';
+                        view.help.className = 'hidden';
+                        view.footer.className = 'hidden';
+                        if(view.packery.getItemElements().length > 0) dropzone.className = 'panel hidden';
                     } else {
-                        document.querySelector('#drop-zone p').className = '';
-                        document.querySelector('#drop-zone h3').className = '';
-                        document.getElementById('packery-container').children.length > 0 ? dropzone.className = 'panel help' : dropzone.className = 'panel';
+                      view.header.className = '';
+                      view.help.className = '';
+                      view.footer.className = '';
+                        view.packery.getItemElements().length > 0 ? dropzone.className = 'panel help' : dropzone.className = 'panel';
                     }
                     break;
             }
