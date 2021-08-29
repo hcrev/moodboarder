@@ -17,11 +17,14 @@ html {
   height: calc(100% - 32px);
   margin: 16px;
   z-index: 99;
-  background: none; }
-  .panel h3 {
+  background: none;
+  display: grid;
+  grid-template-rows: 20% auto 10%;
+  align-items: center; }
+  .panel h1, .panel p, .panel footer {
     margin: 5%; }
-  .panel p {
-    margin-top: calc(50vh - 32px - 8%); }
+  .panel footer a:link, .panel footer a:visited {
+    color: white; }
 
 #fullscreen {
   background-color: #222;
