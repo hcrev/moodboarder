@@ -191,6 +191,13 @@ let view = {
                     view.col_width = 9.00001;
                     is_reLayout = true;
                     break;
+                case 67:
+                    // The C key copies the filename to clipboard
+                    navigator.clipboard.writeText(view.currentImage.children[0].firstChild.innerHTML).then(function() {
+                      console.log('Copied ' + view.currentImage.children[0].firstChild.innerHTML);
+                    });
+
+                    break;
                 case 68:
                     // The d key removes the element that the mouse is currently on
                     view.packery.remove(view.currentImage);
