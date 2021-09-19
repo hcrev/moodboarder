@@ -4,6 +4,7 @@
 /bower_components/
 /node_modules/
 /public/
+/tmp/
 
 # OS or Editor folders
 .DS_Store
